@@ -1,0 +1,3 @@
+*.json          # ignore your private key file
+.env            # ignore any local environment config
+__pycache__/    # ignore Python’s junk folder
