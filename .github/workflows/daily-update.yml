@@ -1,0 +1,26 @@
+name: Daily Sheet Update
+
+on:
+  schedule:
+    - cron: '0 7 * * *'  # Midnight Pacific (cron is in UTC)
+  workflow_dispatch:  # lets you trigger it manually too
+
+jobs:
+  update-sheet:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: 3.x
+
+      - name: Install dependencies
+        run: pip install gspread google-auth
+
+      - name: Run the script
+        env:
+          GOOGLE_CREDS_JSON: ${{ secrets.GOOGLE_CREDS_JSON }}
+        run: python main.py

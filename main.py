@@ -2,14 +2,21 @@ from datetime import datetime
 import os
 import gspread
 from google.oauth2.service_account import Credentials
+import json
+import tempfile
 
 # Auth
-SERVICE_ACCOUNT_FILE = os.path.expanduser("shining-hydra-345423-cbddcee729e5.json")
+
+creds_json = os.environ['GOOGLE_CREDS_JSON']
+with tempfile.NamedTemporaryFile(mode='w+', delete=False, suffix=".json") as temp:
+    temp.write(creds_json)
+    temp.flush()
+    creds_path = temp.name
 SCOPES = [
     "https://www.googleapis.com/auth/spreadsheets",
     "https://www.googleapis.com/auth/drive"
 ]
-creds = Credentials.from_service_account_file(SERVICE_ACCOUNT_FILE, scopes=SCOPES)
+creds = Credentials.from_service_account_file(creds_path, scopes=SCOPES)
 client = gspread.authorize(creds)
 
 # Open sheet
